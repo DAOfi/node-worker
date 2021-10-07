@@ -1,0 +1,8 @@
+namespace: default
+label: node-worker
+replicaCount: 1
+env: development
+image:
+  name: node-worker
+  repo: gcr.io/daofi-dev/node-worker
+  tag: latest

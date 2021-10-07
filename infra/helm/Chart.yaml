@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Relay server for DAOfi app
+name: node-worker
+version: v1
