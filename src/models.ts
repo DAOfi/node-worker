@@ -4,7 +4,8 @@ export interface TokenModel {
   tokenId: number
   projectTokenId: number
   tokenURI: string
-  transactionHash: string
+  mintTxHash: string
+  updateTxHash: string
   meta: any
 }
 

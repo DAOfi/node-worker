@@ -31,7 +31,6 @@ export const nodeP5Controller = async (
     const doc = (await db
       .collection('projects')
       .findOne({ _id: id })) as ProjectModel
-    console.log('event', event.address, event.transactionHash)
     if (doc && Views.hasOwnProperty(doc.view)) {
       const tokenId = parseInt(event.args['tokenId_'])
       const projectTokenId = parseInt(event.args['projectTokenId_'])
@@ -141,6 +140,7 @@ export const nodeP5Controller = async (
             }
           )
           // console.log('ipfs json result:', ipfsJSON.data)
+          let updateHash = 'unknown'
           if (!viewObj.data.test) {
             // Set the token URI
             const gasPrice = await getGasPrice()
@@ -157,24 +157,26 @@ export const nodeP5Controller = async (
               tx.hash
             )
             await tx.wait(5) // 5 confirmations
-            // Update the DB
-            let token: TokenModel = {
-              tokenId,
-              projectTokenId,
-              tokenURI: `ipfs://${ipfsJSON.data.IpfsHash}`,
-              transactionHash: event.transactionHash,
-              meta: viewObj.data.meta,
-            }
-            await db.collection('projects').updateOne(
-              { _id: id },
-              {
-                $set: {
-                  lastBlock: event.blockNumber,
-                  [`tokens.${tokenId}`]: token,
-                },
-              }
-            )
+            updateHash = tx.hash
           }
+          // Update the DB
+          let token: TokenModel = {
+            tokenId,
+            projectTokenId,
+            tokenURI: `ipfs://${ipfsJSON.data.IpfsHash}`,
+            mintTxHash: event.transactionHash,
+            updateTxHash: updateHash,
+            meta: viewObj.data.meta,
+          }
+          await db.collection('projects').updateOne(
+            { _id: id },
+            {
+              $set: {
+                lastBlock: event.blockNumber,
+                [`tokens.${tokenId}`]: token,
+              },
+            }
+          )
           fs.rmdirSync(`${tokenId}`, { recursive: true })
           console.log(
             'complete',
@@ -184,7 +186,6 @@ export const nodeP5Controller = async (
             tokenId
           )
         } catch (e: any) {
-          fs.rmdirSync(`${tokenId}`, { recursive: true })
           console.error(
             'nodeP5Controller error',
             typeof e.toJSON === 'function' ? e.toJSON() : e

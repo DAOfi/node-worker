@@ -12,7 +12,7 @@ export const testView: ViewFunc = (
     frameRate: 1,
     isPng: true,
     appendGif: true,
-    test: false,
+    test: true,
   }
   const sketch = (p: any) => {
     data.meta = {}
