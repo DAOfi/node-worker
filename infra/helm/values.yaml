@@ -2,6 +2,8 @@ namespace: default
 label: node-worker
 replicaCount: 1
 env: development
+contract: 0x2e2691819d3441994e9709e776bd77d08cd9e89b
+network: mainnet
 image:
   name: node-worker
   repo: gcr.io/daofi-dev/node-worker

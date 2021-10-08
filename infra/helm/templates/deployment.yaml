@@ -26,9 +26,11 @@ spec:
             - name: NODE_ENV
               value: {{ .Values.env }}
             - name: CONTRACT
-              value: '0x2e2691819d3441994e9709e776bd77d08cd9e89b'
+              value: {{ .Values.contract }}
             - name: NETWORK
-              value: 'mainnet'
+              value: {{ .Values.network }}
+            - name: ENDPOINT
+              value: tcp://nft-server:3030
             - name: MONGO_PWD
               valueFrom:
                 secretKeyRef:
