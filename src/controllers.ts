@@ -7,22 +7,21 @@ import { ProjectModel, TokenModel } from './models'
 import * as Views from './views'
 
 const p5 = require('node-p5')
-
-export type ControllerFunc = (
-  contract: ethers.Contract,
-  db: Db,
-  id: ObjectId
-) => (event: any) => void
+let lastGasPrice = '300'
 
 async function getGasPrice() {
-  return (
+  const result = (
     await axios.get(
       `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${process.env.ETHERSCAN_KEY}`
     )
   ).data.result.FastGasPrice // ProposeGasPrice
+  if (result) {
+    lastGasPrice = result
+  }
+  return lastGasPrice
 }
 
-export const nodeP5Controller: ControllerFunc = (
+export const nodeP5Controller = async (
   contract: ethers.Contract,
   db: Db,
   id: ObjectId
@@ -34,8 +33,8 @@ export const nodeP5Controller: ControllerFunc = (
       .findOne({ _id: id })) as ProjectModel
     console.log('event', event.address, event.transactionHash)
     if (doc && Views.hasOwnProperty(doc.view)) {
-      const tokenId = event.args['tokenId_'].toNumber()
-      const projectTokenId = event.args['projectTokenId_'].toNumber()
+      const tokenId = parseInt(event.args['tokenId_'])
+      const projectTokenId = parseInt(event.args['projectTokenId_'])
       if (!doc.tokens || !doc.tokens.hasOwnProperty(tokenId)) {
         console.log(
           'generating',
@@ -72,7 +71,7 @@ export const nodeP5Controller: ControllerFunc = (
             imgData.append(
               'file',
               file,
-              `${doc.projectId}_${projectTokenId}_${tokenId}.gif`
+              `${doc.network}_${doc.projectId}_${projectTokenId}_${tokenId}.gif`
             )
             ipfsGif = await axios.post(
               'https://api.pinata.cloud/pinning/pinFileToIPFS',
@@ -98,7 +97,7 @@ export const nodeP5Controller: ControllerFunc = (
             imgData.append(
               'file',
               file,
-              `${doc.projectId}_${projectTokenId}_${tokenId}.png`
+              `${doc.network}_${doc.projectId}_${projectTokenId}_${tokenId}.png`
             )
             ipfsPng = await axios.post(
               'https://api.pinata.cloud/pinning/pinFileToIPFS',
@@ -128,7 +127,7 @@ export const nodeP5Controller: ControllerFunc = (
           // Upload json to IPFS
           const jsonBody = {
             pinataMetadata: {
-              name: `${doc.projectId}_${projectTokenId}_${tokenId}.json`,
+              name: `${doc.network}_${doc.projectId}_${projectTokenId}_${tokenId}.json`,
             },
             pinataContent: viewObj.data.meta,
           }
@@ -153,11 +152,11 @@ export const nodeP5Controller: ControllerFunc = (
                 gasPrice: ethers.utils.parseUnits(gasPrice, 'gwei'),
               }
             )
-            await tx.wait()
             console.log(
               `setTokenURI ${tokenId} ipfs://${ipfsJSON.data.IpfsHash}`,
               tx.hash
             )
+            await tx.wait(5) // 5 confirmations
             // Update the DB
             let token: TokenModel = {
               tokenId,
@@ -185,6 +184,7 @@ export const nodeP5Controller: ControllerFunc = (
             tokenId
           )
         } catch (e: any) {
+          fs.rmdirSync(`${tokenId}`, { recursive: true })
           console.error(
             'nodeP5Controller error',
             typeof e.toJSON === 'function' ? e.toJSON() : e
