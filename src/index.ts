@@ -41,6 +41,7 @@ const wallet: ethers.Wallet = new ethers.Wallet(
   process.env.PRIVATE_KEY || '',
   provider
 )
+console.log('Connected wallet', process.env.NETWORK, wallet.address)
 const contract: ethers.Contract = new ethers.Contract(
   process.env.CONTRACT || '',
   ScorpioNFT.abi,
