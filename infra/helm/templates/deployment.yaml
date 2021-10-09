@@ -44,7 +44,7 @@ spec:
             - name: PRIVATE_KEY
               valueFrom:
                 secretKeyRef:
-                  name: eth-1
+                  name: {{ .Values.pk }}
                   key: secret
             - name: ETHERSCAN_KEY
               valueFrom:
