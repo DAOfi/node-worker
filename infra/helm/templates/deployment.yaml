@@ -30,7 +30,7 @@ spec:
             - name: NETWORK
               value: {{ .Values.network }}
             - name: ENDPOINT
-              value: tcp://nft-server:3030
+              value: "tcp://nft-server-{{ .Value.env }}:3030"
             - name: MONGO_PWD
               valueFrom:
                 secretKeyRef:
