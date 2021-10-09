@@ -67,9 +67,7 @@ async function main() {
         if (project.network === process.env.NETWORK) {
           if (Controllers.hasOwnProperty(project.controller)) {
             // Setup controller
-            const controllerFunc = (
-              Controllers as any
-            )[project.controller]
+            const controllerFunc = (Controllers as any)[project.controller]
             controllers[project.projectId] = await controllerFunc(
               contract,
               db,
@@ -90,17 +88,14 @@ async function main() {
         }
       }
       // Listen for zmq events
-      sock.on(
-        'message',
-        async (projectIdStr, eventStr) => {
-          const projectId = parseInt(projectIdStr)
-          if (controllers.hasOwnProperty(projectId)) {
-            const event = JSON.parse(eventStr.toString())
-            console.log('event', event.address, event.transactionHash)
-            queue.run(() => controllers[projectId](event))
-          }
+      sock.on('message', async (projectIdStr, eventStr) => {
+        const projectId = parseInt(projectIdStr)
+        if (controllers.hasOwnProperty(projectId)) {
+          const event = JSON.parse(eventStr.toString())
+          console.log('event', event.address, event.transactionHash)
+          queue.run(() => controllers[projectId](event))
         }
-      )
+      })
     }
   })
 }
