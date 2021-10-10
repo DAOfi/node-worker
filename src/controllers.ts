@@ -26,7 +26,7 @@ export const nodeP5Controller = async (
   db: Db,
   id: ObjectId
 ) => {
-  console.log('Creating testController')
+  console.log('Creating nodeP5Controller')
   return async (event: any) => {
     const doc = (await db
       .collection('projects')
