@@ -30,6 +30,7 @@ export const gensengView: ViewFunc = (
     }
     data.meta.collection = 'Genseng: An Infinite Regress'
     data.meta.contract = process.env.CONTRACT
+    data.meta.script = 'https://github.com/DAOfi/node-worker/blob/main/src/views/genseng.ts'
     data.meta.description =
       'A blend of generative and ginseng, Brian’s NFT, “Genseng: An Infinite Regress” is a compositional system in which colorful vortexes have enveloped a digital canvas. Randomization of numerical sequences determines color combinations from a set of color palettes curated both intuitively and systematically according to emotional resonance and memetic significance.'
     data.meta.attributes = []
