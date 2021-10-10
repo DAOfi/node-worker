@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import express from 'express'
+import express, { Request } from 'express'
 import { Db, MongoClient } from 'mongodb'
 import Queue from 'async-await-queue'
 import zmq from 'zeromq'
@@ -17,6 +17,7 @@ const requiredEnv = [
   'NETWORK',
   'JWT',
 ]
+let db: Db
 
 requiredEnv.forEach((env) => {
   if (!process.env[env]) {
@@ -52,9 +53,7 @@ const controllers: { [key: number]: (event: any) => void } = {}
 
 const queue = new Queue(1, 2000)
 
-async function main() {
-  const db: Db = (await client.connect()).db('scorpio')
-  console.info('Conntected to Db scorpio')
+async function subscribe() {
   // Get list of contracts and iterate
   const projects = db.collection('projects')
   projects.find({}).toArray(async (err, items) => {
@@ -73,7 +72,8 @@ async function main() {
               db,
               project._id
             )
-            // Subscribe to topic
+            // Re-subscribe to topic
+            sock.unsubscribe(project.projectId.toString())
             sock.subscribe(project.projectId.toString())
             console.log('Subscribed to project', project.projectId)
           } else {
@@ -87,15 +87,21 @@ async function main() {
           console.warn('Invalid network:', project.projectId, project.network)
         }
       }
-      // Listen for zmq events
-      sock.on('message', async (projectIdStr, eventStr) => {
-        const projectId = parseInt(projectIdStr)
-        if (controllers.hasOwnProperty(projectId)) {
-          const event = JSON.parse(eventStr.toString())
-          console.log('event', event.address, event.transactionHash)
-          queue.run(() => controllers[projectId](event))
-        }
-      })
+    }
+  })
+}
+
+async function main() {
+  db = (await client.connect()).db('scorpio')
+  console.info('Conntected to scorpio db')
+  await subscribe()
+  // Listen for zmq events
+  sock.on('message', async (projectIdStr, eventStr) => {
+    const projectId = parseInt(projectIdStr)
+    if (controllers.hasOwnProperty(projectId)) {
+      const event = JSON.parse(eventStr.toString())
+      console.log('event', event.address, event.transactionHash)
+      queue.run(() => controllers[projectId](event))
     }
   })
 }
@@ -103,6 +109,15 @@ async function main() {
 // Setup listeners then launch server
 main()
   .then(() => {
+    app.post('/subscribe', async (req: Request, res: express.Response): Promise<void> => {
+      const token = req.headers.authorization?.split(' ')[1]
+      if (token && token === process.env.JWT) {
+        await subscribe()
+        res.send({ success: true })
+      } else {
+        res.sendStatus(403)
+      }
+    })
     app.listen(8081, () => console.info('Worker API listening on port 8081'))
   })
   .catch((error) => {
