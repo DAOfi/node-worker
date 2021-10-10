@@ -83,6 +83,10 @@ export const nodeP5Controller = async (
                 },
               }
             )
+
+            if (!ipfsGif || !ipfsGif.data || !ipfsGif.data.IpfsHash) {
+              throw new Error('gif creation failed')
+            }
           }
 
           if (viewObj.data.isPng) {
@@ -109,6 +113,10 @@ export const nodeP5Controller = async (
                 },
               }
             )
+
+            if (!ipfsPng || !ipfsPng.data || !ipfsPng.data.IpfsHash) {
+              throw new Error('png creation failed')
+            }
           }
           // Set image URIs
           if (viewObj.data.isPng) {
@@ -139,6 +147,9 @@ export const nodeP5Controller = async (
               },
             }
           )
+          if (!ipfsJSON || !ipfsJSON.data || !ipfsJSON.data.IpfsHash) {
+            throw new Error('json creation failed')
+          }
           // console.log('ipfs json result:', ipfsJSON.data)
           let updateHash = 'unknown'
           if (!viewObj.data.test) {
@@ -168,16 +179,16 @@ export const nodeP5Controller = async (
             updateTxHash: updateHash,
             meta: viewObj.data.meta,
           }
-          await db.collection('projects').updateOne(
-            { _id: id },
-            {
-              $set: {
-                lastBlock: event.blockNumber,
-                [`tokens.${tokenId}`]: token,
-              },
-            }
-          )
-          fs.rmdirSync(`${tokenId}`, { recursive: true })
+          // await db.collection('projects').updateOne(
+          //   { _id: id },
+          //   {
+          //     $set: {
+          //       lastBlock: event.blockNumber,
+          //       [`tokens.${tokenId}`]: token,
+          //     },
+          //   }
+          // )
+          // fs.rmdirSync(`${tokenId}`, { recursive: true })
           console.log(
             'complete',
             doc.view,

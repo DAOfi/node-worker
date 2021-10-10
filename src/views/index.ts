@@ -20,3 +20,4 @@ export type ViewFunc = (
 ) => ViewObject
 
 export { testView } from './test'
+export { gensengView } from './genseng'
