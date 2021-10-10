@@ -39,8 +39,8 @@
   "scripts": {
     "start": "ts-node --transpile-only src/index.ts",
     "start:debug": "nodemon src/index.ts",
-    "lint": "yarn prettier ./**/*.ts --check",
-    "lint:fix": "yarn prettier ./**/*.ts --write"
+    "lint": "prettier '{,!(node_modules)/**/}*.ts' --check",
+    "lint:fix": "prettier '{,!(node_modules)/**/}*.ts' --write"
   },
   "license": "MIT",
   "dependencies": {

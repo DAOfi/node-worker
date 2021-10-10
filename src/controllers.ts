@@ -179,16 +179,16 @@ export const nodeP5Controller = async (
             updateTxHash: updateHash,
             meta: viewObj.data.meta,
           }
-          // await db.collection('projects').updateOne(
-          //   { _id: id },
-          //   {
-          //     $set: {
-          //       lastBlock: event.blockNumber,
-          //       [`tokens.${tokenId}`]: token,
-          //     },
-          //   }
-          // )
-          // fs.rmdirSync(`${tokenId}`, { recursive: true })
+          await db.collection('projects').updateOne(
+            { _id: id },
+            {
+              $set: {
+                lastBlock: event.blockNumber,
+                [`tokens.${tokenId}`]: token,
+              },
+            }
+          )
+          fs.rmdirSync(`${tokenId}`, { recursive: true })
           console.log(
             'complete',
             doc.view,
