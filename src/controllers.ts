@@ -8,7 +8,7 @@ import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
 const p5 = require('node-p5')
-const MAX_GAS = 80
+const MAX_GAS = 120
 let lastGasPrice = '300'
 
 const sleep = async (time: number) =>
@@ -25,7 +25,7 @@ async function getGasPrice() {
       lastGasPrice = result
     }
     if (parseInt(lastGasPrice) > MAX_GAS) {
-      console.warn('Gas too high', lastGasPrice)
+      console.warn('Gas too high', lastGasPrice, '>', MAX_GAS)
       await sleep(3000)
     }
   } while (parseInt(lastGasPrice) > MAX_GAS)
