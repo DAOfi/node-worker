@@ -102,6 +102,44 @@ export const gensengView: ViewFunc = (
       'Loyal',
       'Loving',
       'Lovely',
+      'Lively',
+      'Lucky',
+      'Lustful',
+      'Merry',
+      'Magical',
+      'Mindful',
+      'Motivated',
+      'Mysterious',
+      'Naughty',
+      'Optimistic',
+      'Gritty',
+      'Perceptive',
+      'Playful',
+      'Productive',
+      'Pure',
+      'Persistent',
+      'Powerful',
+      'Provocative',
+      'Quirky',
+      'High',
+      'Romantic',
+      'Radiant',
+      'Rich',
+      'Relaxed',
+      'Stimulating',
+      'Successful',
+      'Sacred',
+      'Soulful',
+      'Stellar',
+      'Stunning',
+      'Talented',
+      'Uplifting',
+      'Vibrant',
+      'Warm',
+      'Witty',
+      'Wealthy',
+      'Wise',
+      'Excited',
     ]
     const palettes: any = []
     const onions: any = []
@@ -524,8 +562,7 @@ export const gensengView: ViewFunc = (
       data.meta.seed = Date.now()
       p.randomSeed(data.meta.seed)
       paletteIdx = Math.floor(p.random(0, 99))
-      console.log('palette idx:', paletteIdx)
-      console.log('palette name:', paletteNames[paletteIdx])
+      data.meta.palette = paletteIdx + 1
       data.canvas = p.createCanvas(width, height)
       data.meta.attributes.push({
         trait_type: 'Genseng: An Infinite Regress',
