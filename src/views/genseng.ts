@@ -526,7 +526,7 @@ export const gensengView: ViewFunc = (
       data.canvas = p.createCanvas(width, height)
       data.meta.attributes.push({
         trait_type: 'Genseng: An Infinite Regress',
-        value: `Pallete: ${paletteNames[paletteIdx]}`,
+        value: `Palette: ${paletteNames[paletteIdx]}`,
       })
       palettes[0] = [
         p.color('#000000'),
