@@ -8,17 +8,27 @@ import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
 const p5 = require('node-p5')
+const MAX_GAS = 80
 let lastGasPrice = '300'
 
+const sleep = async (time: number) =>
+  new Promise((resolve) => setTimeout(resolve, time))
+
 async function getGasPrice() {
-  const result = (
-    await axios.get(
-      `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${process.env.ETHERSCAN_KEY}`
-    )
-  ).data.result.FastGasPrice // ProposeGasPrice
-  if (result) {
-    lastGasPrice = result
-  }
+  do {
+    const result = (
+      await axios.get(
+        `https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${process.env.ETHERSCAN_KEY}`
+      )
+    ).data.result.FastGasPrice // ProposeGasPrice
+    if (result) {
+      lastGasPrice = result
+    }
+    if (parseInt(lastGasPrice) > MAX_GAS) {
+      console.warn('Gas too high', lastGasPrice)
+      await sleep(3000)
+    }
+  } while (parseInt(lastGasPrice) > MAX_GAS)
   return lastGasPrice
 }
 
