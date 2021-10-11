@@ -50,6 +50,8 @@ export const nodeP5Controller = async (
             projectTokenId,
             tokenId
           )
+          // set some initial metadata
+          viewObj.data.meta.mintTransactionHash = event.transactionHash
           const instance = p5.createSketch(viewObj.sketch)
           // Save frames
           await instance.saveFrames(
