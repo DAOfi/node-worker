@@ -978,7 +978,7 @@ assertion-error@^1.1.0:
   resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
   integrity sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==
 
-async-await-queue@^1.2.0:
+async-await-queue@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/async-await-queue/-/async-await-queue-1.2.0.tgz#bd71eef4ada7b63a5c13bcb72f5c01a2575d2d02"
   integrity sha512-Biup5C0vGEnfzzK+ufXvYan2/YK5lga+B5xj/IGmED82MLbUOI8VUB4BZ9JW9qLLB4HU/p7Ca29epJDNTEMEhg==
