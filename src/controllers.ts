@@ -26,7 +26,7 @@ async function getGasPrice() {
     }
     if (parseInt(lastGasPrice) > MAX_GAS) {
       console.warn('Gas too high', lastGasPrice, '>', MAX_GAS)
-      await sleep(3000)
+      await sleep(6000)
     }
   } while (parseInt(lastGasPrice) > MAX_GAS)
   return lastGasPrice
