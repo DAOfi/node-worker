@@ -109,15 +109,18 @@ async function main() {
 // Setup listeners then launch server
 main()
   .then(() => {
-    app.post('/subscribe', async (req: Request, res: express.Response): Promise<void> => {
-      const token = req.headers.authorization?.split(' ')[1]
-      if (token && token === process.env.JWT) {
-        await subscribe()
-        res.send({ success: true })
-      } else {
-        res.sendStatus(403)
+    app.post(
+      '/subscribe',
+      async (req: Request, res: express.Response): Promise<void> => {
+        const token = req.headers.authorization?.split(' ')[1]
+        if (token && token === process.env.JWT) {
+          await subscribe()
+          res.send({ success: true })
+        } else {
+          res.sendStatus(403)
+        }
       }
-    })
+    )
     app.listen(8081, () => console.info('Worker API listening on port 8081'))
   })
   .catch((error) => {

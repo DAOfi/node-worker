@@ -1,9 +1,10 @@
-import { ViewFunc } from '.'
+import { QueueEvent, ViewFunc } from '../types'
 
 export const gensengView: ViewFunc = (
   projectId: number,
   projectTokenId: number,
-  tokenId: number
+  tokenId: number,
+  event: QueueEvent
 ) => {
   const data: any = {
     repeat: 0,
@@ -19,6 +20,7 @@ export const gensengView: ViewFunc = (
       projectId,
       tokenId,
       projectTokenId,
+      blockNumber: event.blockNumber,
       artist: 'Brian Waxham',
     }
     if (projectTokenId < 10) {
@@ -30,7 +32,8 @@ export const gensengView: ViewFunc = (
     }
     data.meta.collection = 'Genseng: An Infinite Regress'
     data.meta.contract = process.env.CONTRACT
-    data.meta.script = 'https://github.com/DAOfi/node-worker/blob/main/src/views/genseng.ts'
+    data.meta.script =
+      'https://github.com/DAOfi/node-worker/blob/main/src/views/genseng.ts'
     data.meta.description =
       'A blend of generative and ginseng, Brian Waxham’s NFT, “Genseng: An Infinite Regress” is a compositional system in which colorful vortexes have enveloped a digital canvas. Randomization of numerical sequences determines color combinations from a set of color palettes curated both intuitively and systematically according to emotional resonance and memetic significance.'
     data.meta.attributes = []
@@ -559,9 +562,10 @@ export const gensengView: ViewFunc = (
     }
 
     p.setup = () => {
-      data.meta.seed = Date.now()
+      data.meta.seed = event.blockNumber * tokenId
       p.randomSeed(data.meta.seed)
       paletteIdx = Math.floor(p.random(0, 99))
+      // console.log('Genseng palette', paletteNames[paletteIdx])
       data.meta.palette = paletteIdx + 1
       data.canvas = p.createCanvas(width, height)
       data.meta.attributes.push({

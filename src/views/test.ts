@@ -1,9 +1,10 @@
-import { ViewFunc } from '.'
+import { QueueEvent, ViewFunc } from '../types'
 
 export const testView: ViewFunc = (
   projectId: number,
   projectTokenId: number,
-  tokenId: number
+  tokenId: number,
+  event: QueueEvent
 ) => {
   const data: any = {
     repeat: 0,

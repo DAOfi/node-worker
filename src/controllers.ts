@@ -4,6 +4,7 @@ import FormData from 'form-data'
 import fs from 'fs'
 import { Db, ObjectId } from 'mongodb'
 import { ProjectModel, TokenModel } from './models'
+import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
 const p5 = require('node-p5')
@@ -44,11 +45,12 @@ export const nodeP5Controller = async (
         )
         try {
           // Do the generative thing
-          const viewFunc: Views.ViewFunc = (Views as any)[doc.view]
-          const viewObj: Views.ViewObject = viewFunc(
+          const viewFunc: ViewFunc = (Views as any)[doc.view]
+          const viewObj: ViewObject = viewFunc(
             doc.projectId,
             projectTokenId,
-            tokenId
+            tokenId,
+            event
           )
           const instance = p5.createSketch(viewObj.sketch)
           // Save frames
