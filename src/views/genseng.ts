@@ -7,7 +7,7 @@ export const gensengView: ViewFunc = (
 ) => {
   const data: any = {
     repeat: 0,
-    quality: 10,
+    quality: 8, //10
     duration: 1,
     frameRate: 1,
     isPng: true,
