@@ -2,8 +2,8 @@ import { ViewFunc } from '.'
 
 export const gensengView: ViewFunc = (
   projectId: number,
-  tokenId: number,
-  projectTokenId: number
+  projectTokenId: number,
+  tokenId: number
 ) => {
   const data: any = {
     repeat: 0,
