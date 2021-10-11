@@ -99,6 +99,7 @@ async function main() {
   sock.on('message', async (projectIdStr, eventStr) => {
     const projectId = parseInt(projectIdStr)
     if (controllers.hasOwnProperty(projectId)) {
+      console.log('raw event:', eventStr.toString())
       const event = JSON.parse(eventStr.toString())
       console.log('event', projectId, event.transactionHash)
       queue.run(() => controllers[projectId](event))
