@@ -523,7 +523,9 @@ export const gensengView: ViewFunc = (
     p.setup = () => {
       data.meta.seed = Date.now()
       p.randomSeed(data.meta.seed)
-      paletteIdx = p.int(p.random(0, 99))
+      paletteIdx = Math.floor(p.random(0, 99))
+      console.log('palette idx:', paletteIdx)
+      console.log('palette name:', paletteNames[paletteIdx])
       data.canvas = p.createCanvas(width, height)
       data.meta.attributes.push({
         trait_type: 'Genseng: An Infinite Regress',
