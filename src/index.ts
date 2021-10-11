@@ -100,7 +100,7 @@ async function main() {
     const projectId = parseInt(projectIdStr)
     if (controllers.hasOwnProperty(projectId)) {
       const event = JSON.parse(eventStr.toString())
-      console.log('event', event.address, event.transactionHash)
+      console.log('event', projectId, event.transactionHash)
       queue.run(() => controllers[projectId](event))
     }
   })

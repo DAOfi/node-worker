@@ -50,8 +50,6 @@ export const nodeP5Controller = async (
             projectTokenId,
             tokenId
           )
-          // set some initial metadata
-          viewObj.data.meta.mintTransactionHash = event.transactionHash
           const instance = p5.createSketch(viewObj.sketch)
           // Save frames
           await instance.saveFrames(
@@ -132,7 +130,8 @@ export const nodeP5Controller = async (
           if (viewObj.data.appendGif) {
             viewObj.data.meta.gif_url = `https://communifty.mypinata.cloud/ipfs/${ipfsGif?.data.IpfsHash}`
           }
-
+          // Set mint tx in metadata
+          viewObj.data.meta.mintTransactionHash = event.transactionHash
           // Upload json to IPFS
           const jsonBody = {
             pinataMetadata: {
