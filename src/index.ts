@@ -108,7 +108,7 @@ async function main() {
         event.args.tokenId_,
         event.transactionHash
       )
-      queue.run(() => controllers[projectId](event))
+      await queue.run(() => controllers[projectId](event))
     }
   })
 }
