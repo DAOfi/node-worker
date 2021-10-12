@@ -7,6 +7,7 @@ import { ProjectModel, TokenModel } from './models'
 import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
+const p5 = require('node-p5')
 const MIN_GAS = 90
 const MAX_GAS = 120
 let lastGasPrice = '300'
@@ -43,7 +44,6 @@ export const nodeP5Controller = async (
 ) => {
   console.log('Creating nodeP5Controller')
   return async (event: any) => {
-    let p5 = require('node-p5')
     const doc = (await db
       .collection('projects')
       .findOne({ _id: id })) as ProjectModel
@@ -76,7 +76,7 @@ export const nodeP5Controller = async (
             viewObj.data.duration,
             viewObj.data.frameRate
           )
-
+          instance.clear()
           let ipfsGif
           let ipfsPng
 
@@ -215,8 +215,6 @@ export const nodeP5Controller = async (
             projectTokenId,
             tokenId
           )
-          p5 = null
-          delete require.cache[require.resolve('node-p5')]
         } catch (e: any) {
           console.error(
             'nodeP5Controller error',

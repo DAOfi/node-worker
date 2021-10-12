@@ -51,7 +51,7 @@ const contract: ethers.Contract = new ethers.Contract(
 console.log('Connected contract', process.env.NETWORK, contract.address)
 const controllers: { [key: number]: (event: any) => void } = {}
 
-const queue = new Queue(1, 2000)
+const queue = new Queue(1)
 
 async function subscribe() {
   // Get list of contracts and iterate
