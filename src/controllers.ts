@@ -76,7 +76,7 @@ export const nodeP5Controller = async (
             viewObj.data.duration,
             viewObj.data.frameRate
           )
-
+          instance.clear()
           let ipfsGif
           let ipfsPng
 
