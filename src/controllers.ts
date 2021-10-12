@@ -8,6 +8,7 @@ import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
 const p5 = require('node-p5')
+const MIN_GAS = 80
 const MAX_GAS = 120
 let lastGasPrice = '300'
 
@@ -24,9 +25,13 @@ async function getGasPrice() {
     if (result) {
       lastGasPrice = result
     }
-    if (parseInt(lastGasPrice) > MAX_GAS) {
+    const gasPrice = parseInt(lastGasPrice)
+    if (gasPrice > MAX_GAS) {
       console.warn('Gas too high', lastGasPrice, '>', MAX_GAS)
       await sleep(6000)
+    }
+    if (gasPrice < MIN_GAS) {
+      lastGasPrice = MIN_GAS.toString()
     }
   } while (parseInt(lastGasPrice) > MAX_GAS)
   return lastGasPrice
@@ -178,9 +183,10 @@ export const nodeP5Controller = async (
             )
             console.log(
               `setTokenURI ${tokenId} ipfs://${ipfsJSON.data.IpfsHash}`,
-              tx.hash
+              tx.hash,
+              gasPrice
             )
-            await tx.wait(5) // 5 confirmations
+            await tx.wait() // wait 1 confirmation, if tx is re-orged we can always backfill
             updateHash = tx.hash
           }
           // Update the DB
