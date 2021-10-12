@@ -8,7 +8,7 @@ import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
 const p5 = require('node-p5')
-const MIN_GAS = 80
+const MIN_GAS = 90
 const MAX_GAS = 120
 let lastGasPrice = '300'
 
