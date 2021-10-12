@@ -104,8 +104,8 @@ async function main() {
         'event',
         process.env.NETWORK,
         projectId,
-        event.args.projectTokenId,
-        event.args.tokenId,
+        event.args.projectTokenId_,
+        event.args.tokenId_,
         event.transactionHash
       )
       queue.run(() => controllers[projectId](event))
