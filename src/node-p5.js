@@ -414,7 +414,18 @@ module.exports = {
   module.exports.cleanup = () => {
     mainSketch.noLoop();
     mainSketch = null;
-    document.body.ch
+    dom = new jsdom.JSDOM(`<!DOCTYPE html><html><head></head><body></body></html>`, { predendToBeVisual: true, runScripts: 'outside-only' });
+    window = dom.window;
+    document = window.document;
+    (window.requestAnimationFrame =
+      window.requestAnimationFrame ||
+      window.webkitRequestAnimationFrame ||
+      window.mozRequestAnimationFrame ||
+      window.oRequestAnimationFrame ||
+      window.msRequestAnimationFrame ||
+      function(e, t) {
+        window.setTimeout(e, 1e3 / 60);
+      })
   }
 
   // module.exports.Constructor = pp;
