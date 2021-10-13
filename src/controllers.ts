@@ -67,7 +67,7 @@ export const nodeP5Controller = async (
             tokenId,
             event
           )
-          const instance = p5.createSketch(viewObj.sketch)
+          let instance = p5.createSketch(viewObj.sketch)
           // Save frames
           await instance.saveFrames(
             viewObj.data.canvas,
@@ -76,7 +76,14 @@ export const nodeP5Controller = async (
             viewObj.data.duration,
             viewObj.data.frameRate
           )
-          instance.remove()
+
+          // memory leak whyyyyyyy
+          instance.remove() // this seems to help some
+          delete instance.canvas
+          delete instance.drawingContext
+          delete viewObj.data.canvas
+          instance = null
+
           let ipfsGif
           let ipfsPng
 
