@@ -7,7 +7,7 @@ import { ProjectModel, TokenModel } from './models'
 import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
-const p5 = require('node-p5')
+const p5 = require('./node-p5')
 const MIN_GAS = 90
 const MAX_GAS = 120
 let lastGasPrice = '300'
@@ -78,11 +78,7 @@ export const nodeP5Controller = async (
           )
 
           // memory leak whyyyyyyy
-          instance.remove() // this seems to help some
-          delete instance.canvas
-          delete instance.drawingContext
-          delete viewObj.data.canvas
-          instance = null
+          p5.cleanup()
 
           let ipfsGif
           let ipfsPng
