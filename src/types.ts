@@ -24,7 +24,7 @@ export interface QueueEvent {
 
 export type ViewFunc = (
   projectId: number,
-  tokenId: number,
   projectTokenId: number,
+  tokenId: number,
   event: QueueEvent
 ) => ViewObject
