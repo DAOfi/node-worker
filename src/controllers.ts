@@ -68,15 +68,28 @@ export const nodeP5Controller = async (
             event
           )
           let instance = p5.createSketch(viewObj.sketch)
+          console.log(
+            'saving',
+            doc.view,
+            doc.projectId,
+            projectTokenId,
+            tokenId
+          )
           // Save frames
           await instance.saveFrames(
             viewObj.data.canvas,
             `${tokenId}`, // always save gif
-            { repeat: viewObj.data.repeat, quality: viewObj.data.quality },
+            viewObj.data.appendGif || !viewObj.data.isPng ? { repeat: viewObj.data.repeat, quality: viewObj.data.quality } : 'png',
             viewObj.data.duration,
             viewObj.data.frameRate
           )
-
+          console.log(
+            'saved',
+            doc.view,
+            doc.projectId,
+            projectTokenId,
+            tokenId
+          )
           // memory leak whyyyyyyy
           p5.cleanup()
 
@@ -112,7 +125,7 @@ export const nodeP5Controller = async (
           if (viewObj.data.isPng) {
             // Upload png to IPFS
             const file = fs.createReadStream(
-              `${tokenId}/frame-${
+              `${tokenId}/${viewObj.data.appendGif ? 'frame-' : ''}${
                 viewObj.data.frameRate * viewObj.data.duration - 1
               }.png`
             )
@@ -138,6 +151,13 @@ export const nodeP5Controller = async (
               throw new Error('png creation failed')
             }
           }
+          console.log(
+            'asset pinned',
+            doc.view,
+            doc.projectId,
+            projectTokenId,
+            tokenId
+          )
           // Set image URIs
           if (viewObj.data.isPng) {
             viewObj.data.meta.image = `ipfs://${ipfsPng?.data.IpfsHash}`
@@ -171,6 +191,13 @@ export const nodeP5Controller = async (
           if (!ipfsJSON || !ipfsJSON.data || !ipfsJSON.data.IpfsHash) {
             throw new Error('json creation failed')
           }
+          console.log(
+            'json pinned',
+            doc.view,
+            doc.projectId,
+            projectTokenId,
+            tokenId
+          )
           // console.log('ipfs json result:', ipfsJSON.data)
           let updateHash = 'unknown'
           if (!viewObj.data.test) {
@@ -201,6 +228,7 @@ export const nodeP5Controller = async (
             updateTxHash: updateHash,
             meta: viewObj.data.meta,
           }
+          console.log('updating db' )
           await db.collection('projects').updateOne(
             { _id: id },
             {
@@ -209,6 +237,13 @@ export const nodeP5Controller = async (
                 [`tokens.${tokenId}`]: token,
               },
             }
+          )
+          console.log(
+            'db updated',
+            doc.view,
+            doc.projectId,
+            projectTokenId,
+            tokenId
           )
           fs.rmdirSync(`${tokenId}`, { recursive: true })
           console.log(

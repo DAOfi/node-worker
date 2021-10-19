@@ -351,7 +351,7 @@ module.exports = {
         let stream = pngFileStream(`${dir}/frame-${str}.png`)
           .pipe(encoder.createWriteStream(options))
           .pipe(fs.createWriteStream(`${dir}/${dir}.gif`));
-        stream.on('finish', () => {
+        stream.on('end', () => {
           if(cb) cb();
           else resolve();
         });
@@ -365,6 +365,7 @@ module.exports = {
             }
           });
         });
+        resolve();
       }
     });
   }
