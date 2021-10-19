@@ -8,9 +8,9 @@ import { ViewObject, ViewFunc } from './types'
 import * as Views from './views'
 
 const p5 = require('./node-p5')
-const MIN_GAS = 90
-const MAX_GAS = 120
-let lastGasPrice = '300'
+const MIN_GAS = 80
+const MAX_GAS = 110
+let lastGasPrice = '95'
 
 const sleep = async (time: number) =>
   new Promise((resolve) => setTimeout(resolve, time))
