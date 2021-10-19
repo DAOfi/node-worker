@@ -318,7 +318,7 @@ export const websView: ViewFunc = (
           [332, 38],
         ])
         bg_brt = [85, 90]
-        bg_sat = p.ranodm(30, 55)
+        bg_sat = p.random(30, 55)
         let size = 1
 
         for (let i = 0; i < width; i++) {
