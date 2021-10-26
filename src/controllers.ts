@@ -79,17 +79,13 @@ export const nodeP5Controller = async (
           await instance.saveFrames(
             viewObj.data.canvas,
             `${tokenId}`, // always save gif
-            viewObj.data.appendGif || !viewObj.data.isPng ? { repeat: viewObj.data.repeat, quality: viewObj.data.quality } : 'png',
+            viewObj.data.appendGif || !viewObj.data.isPng
+              ? { repeat: viewObj.data.repeat, quality: viewObj.data.quality }
+              : 'png',
             viewObj.data.duration,
             viewObj.data.frameRate
           )
-          console.log(
-            'saved',
-            doc.view,
-            doc.projectId,
-            projectTokenId,
-            tokenId
-          )
+          console.log('saved', doc.view, doc.projectId, projectTokenId, tokenId)
           // memory leak whyyyyyyy
           p5.cleanup()
 
@@ -228,7 +224,7 @@ export const nodeP5Controller = async (
             updateTxHash: updateHash,
             meta: viewObj.data.meta,
           }
-          console.log('updating db' )
+          console.log('updating db')
           await db.collection('projects').updateOne(
             { _id: id },
             {

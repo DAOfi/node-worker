@@ -331,6 +331,7 @@ module.exports = {
         }
       }
 
+      // Note this doesn't work
       if(typeof ext === "object") {
         //save as gif
         let mag = sFrames.length.toString().length;
@@ -17528,7 +17529,7 @@ module.exports = {
               return this;
             }),
             (i.prototype.vertex = function(e, t, r, i, n) {
-              if (this._renderer.isP3D)
+              if (this._renderer && this._renderer.isP3D)
                 this._renderer.vertex.apply(this._renderer, arguments);
               else {
                 var o = [];
